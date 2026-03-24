@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#reset-filters-btn {
+    transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+}
+
+#reset-filters-btn.secondary-action {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+#reset-filters-btn:hover {
+    transform: translateY(-1px);
+}
+
+.view-toggle-btn {
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    min-width: 150px;
+    white-space: nowrap;
+}
+
+.species-search-wrapper {
+    width: 100%;
+}
+
+.species-search-wrapper input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(15, 23, 42, 0.15);
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.species-search-wrapper input:focus {
+    border-color: rgba(59, 130, 246, 0.8);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.species-search-wrapper input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(15, 23, 42, 0.6);
+}
+
+#dimension-filter-control {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#dimension-filter-control .control-hint {
+    min-height: 0;
+}
+
+#dimension-filter-control select {
+    width: 100%;
+}
+
+.highlight-control {
+    width: 100%;
+    min-width: 0;
+}
+
+.highlight-control select {
+    width: 100%;
+    min-width: 0;
+}
+
+.highlight-control .species-search-wrapper {
+    width: 100%;
+    display: block;
+    margin-top: 6px;
+}
+
+.highlight-control .species-search-wrapper input {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .view-toggle-btn {
+        min-width: 0;
+    }
+}
+
+.dual-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .dual-action-buttons {
+        flex-direction: row;
+    }
+}
+
+.dual-action-buttons button {
+    flex: 1;
+}
+
+#autopilot-btn {
+    background: rgba(59, 130, 246, 0.9);
+    border: 1px solid rgba(59, 130, 246, 1);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+#autopilot-btn:hover {
+    background: rgba(37, 99, 235, 1);
+}
+
+#autopilot-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: rgba(155, 155, 155, 0.4) !important;
+    background: rgba(229, 231, 235, 0.5) !important;
+    color: rgba(30, 41, 59, 0.65) !important;
+}

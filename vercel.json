@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "src": "/(.*)\\.json\\.gz",
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Encoding": "gzip"
+      },
+      "dest": "/$1.json.gz"
+    }
+  ]
+}

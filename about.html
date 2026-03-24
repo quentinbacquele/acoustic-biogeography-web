@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Acoustic Biogeography</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --accent: #BA5A31;
+        --text-secondary: #4a4a4a;
+        --bg-primary: #fafafa;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        overscroll-behavior: none;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+        overflow-x: hidden;
+        overscroll-behavior-y: none;
+        background-color: var(--bg-primary);
+      }
+
+      .mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      /* Navigation */
+      .nav {
+        position: fixed;
+        top: 2rem;
+        left: 2rem;
+        right: 2rem;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      @media (max-width: 768px) {
+        .nav {
+          top: 1rem;
+          left: 1rem;
+          right: 1rem;
+          padding: 0.75rem 1.5rem;
+        }
+
+        .nav-brand {
+          font-size: 0.9rem !important;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+
+      .nav:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        font-family: 'Manrope', sans-serif;
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 400;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0;
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--accent);
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      /* Main Content */
+      .main-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 140px 2rem 2rem;
+      }
+
+      .page-title {
+        font-family: 'Manrope', sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #1a1a1a;
+        margin-bottom: 3rem;
+      }
+
+      .image-placeholder {
+        width: 100%;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto 4rem;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+        font-family: 'Manrope', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 500;
+        border: 2px dashed #d1d5db;
+      }
+
+      .section {
+        margin-bottom: 3rem;
+      }
+
+      .section-title {
+        font-family: 'Manrope', sans-serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 1.5rem;
+      }
+
+      .card {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e5e7eb;
+      }
+
+      .card-title {
+        font-family: 'Manrope', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 0.75rem;
+      }
+
+      .card-text {
+        color: #6b7280;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .contact-link {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      /* Team Cards */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        align-items: stretch;
+      }
+
+      .team-card {
+        background: #ffffff;
+        padding: 2.5rem;
+        border-radius: 1rem;
+        border: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+
+      .member-initials {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        overflow: hidden;
+        border: 3px solid #f3f4f6;
+      }
+
+      .member-initials img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+      }
+
+      .member-name {
+        font-family: 'Manrope', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
+
+      .member-role {
+        color: var(--accent);
+        font-weight: 500;
+        margin-bottom: 0.35rem;
+        text-align: center;
+        font-size: 0.95rem;
+      }
+
+      .member-affiliation {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .member-bio {
+        color: #6b7280;
+        line-height: 1.6;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+
+      .expertise-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 2rem;
+        justify-content: center;
+        align-content: flex-start;
+        flex-grow: 1;
+      }
+
+      .expertise-tag {
+        background: #f3f4f6;
+        color: #4b5563;
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .member-links {
+        display: flex;
+        gap: 0.75rem;
+        flex-direction: row;
+        justify-content: center;
+        padding-top: 1rem;
+        border-top: 1px solid #f3f4f6;
+      }
+
+      .member-link {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: #fafafa;
+        border-radius: 0.5rem;
+      }
+
+      /* Footer */
+      .footer {
+        background: #000000;
+        color: #ffffff;
+        padding: 2rem;
+        text-align: center;
+        font-family: 'Manrope', sans-serif;
+        margin-top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          padding: 120px 1.5rem 0;
+        }
+
+        .image-placeholder {
+          height: 250px;
+          font-size: 1rem;
+        }
+
+        .team-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: 10000; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+      <div style="background: white; padding: 3rem; border-radius: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 400px; width: 90%;">
+        <h2 style="margin: 0 0 1rem 0; color: #333; font-size: 1.5rem;">Private Access</h2>
+        <p style="margin: 0 0 1.5rem 0; color: #666;">Please enter the password to continue</p>
+        <input type="password" id="password-input" placeholder="Enter password" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 0.5rem; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box;" />
+        <button id="password-submit" style="width: 100%; padding: 0.75rem; background: #667eea; color: white; border: none; border-radius: 0.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">Access Site</button>
+        <p id="password-error" style="margin: 1rem 0 0 0; color: #e74c3c; font-size: 0.875rem; display: none;">Incorrect password</p>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        const correctPassword = 'bird'; // Change this to your desired password
+        const overlay = document.getElementById('password-overlay');
+        const input = document.getElementById('password-input');
+        const submit = document.getElementById('password-submit');
+        const error = document.getElementById('password-error');
+
+        // Check if already authenticated
+        if (sessionStorage.getItem('authenticated') === 'true') {
+          overlay.style.display = 'none';
+          return;
+        }
+
+        function checkPassword() {
+          if (input.value === correctPassword) {
+            sessionStorage.setItem('authenticated', 'true');
+            overlay.style.display = 'none';
+          } else {
+            error.style.display = 'block';
+            input.value = '';
+            input.focus();
+          }
+        }
+
+        submit.addEventListener('click', checkPassword);
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') checkPassword();
+        });
+
+        input.focus();
+      })();
+    </script>
+
+    <nav class="nav">
+      <a href="index.html" class="mono nav-brand" style="font-weight: 400; text-decoration: none; color: #4a4a4a;">ACOUSTIC BIOGEOGRAPHY</a>
+      <div class="nav-links">
+        <a href="index.html#map">Interactive Visualization</a>
+        <a href="about.html">About</a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <!-- Paper Section -->
+      <section class="section">
+        <h2 class="section-title">Paper</h2>
+
+        <div class="card">
+          <p class="card-text">
+            The manuscript is currently in preparation. Link to the publication will be added here upon availability.
+          </p>
+        </div>
+      </section>
+
+      <!-- Team Section -->
+      <section class="section">
+        <h2 class="section-title">Team</h2>
+
+        <div class="team-grid">
+          <!-- Quentin Bacquelé -->
+          <div class="team-card">
+            <div class="member-initials">
+              <img src="/images/team/QB.jpg" alt="Quentin Bacquelé">
+            </div>
+            <h3 class="member-name">Quentin Bacquelé</h3>
+            <p class="member-role">PhD Student</p>
+            <p class="member-affiliation">ENES Lab & CEFE</p>
+            <div class="expertise-tags">
+              <span class="expertise-tag">Bioacoustics</span>
+              <span class="expertise-tag">Biogeography</span>
+              <span class="expertise-tag">Ecology</span>
+              <span class="expertise-tag">Data Science</span>
+              <span class="expertise-tag">Machine Learning</span>
+              <span class="expertise-tag">Deep Learning</span>
+            </div>
+            <div class="member-links">
+              <a href="https://scholar.google.com/citations?user=QT01HUEAAAAJ&hl=en&oi=ao" target="_blank" class="member-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M9.09 9A3 3 0 0 1 15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Google Scholar
+              </a>
+              <a href="mailto:qbacquele@gmail.com" class="member-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Email
+              </a>
+            </div>
+          </div>
+
+          <!-- Jean-Yves Barnagaud -->
+          <div class="team-card">
+            <div class="member-initials">
+              <img src="/images/team/JB.jpeg" alt="Jean-Yves Barnagaud">
+            </div>
+            <h3 class="member-name">Jean-Yves Barnagaud</h3>
+            <p class="member-role">Associate Professor</p>
+            <p class="member-affiliation">CEFE, CNRS</p>
+            <div class="expertise-tags">
+              <span class="expertise-tag">Macroecology</span>
+              <span class="expertise-tag">Conservation Biology</span>
+              <span class="expertise-tag">Biogeography</span>
+              <span class="expertise-tag">Ornithology</span>
+              <span class="expertise-tag">Community Ecology</span>
+            </div>
+            <div class="member-links">
+              <a href="https://scholar.google.com/citations?hl=en&user=w9bvYxAAAAAJ" target="_blank" class="member-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M9.09 9A3 3 0 0 1 15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Google Scholar
+              </a>
+            </div>
+          </div>
+
+          <!-- Frédéric Theunissen -->
+          <div class="team-card">
+            <div class="member-initials">
+              <img src="/images/team/FT.jpeg" alt="Frédéric Theunissen">
+            </div>
+            <h3 class="member-name">Frédéric Theunissen</h3>
+            <p class="member-role">Professor</p>
+            <p class="member-affiliation">UC Berkeley</p>
+            <div class="expertise-tags">
+              <span class="expertise-tag">Auditory Neurosciences</span>
+              <span class="expertise-tag">Computational Neurosciences</span>
+              <span class="expertise-tag">NeuroEthology</span>
+              <span class="expertise-tag">Animal Communication</span>
+            </div>
+            <div class="member-links">
+              <a href="https://scholar.google.com/citations?user=0gyS3z0AAAAJ&hl=en&oi=ao" target="_blank" class="member-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M9.09 9A3 3 0 0 1 15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Google Scholar
+              </a>
+            </div>
+          </div>
+
+          <!-- Cyrille Violle -->
+          <div class="team-card">
+            <div class="member-initials">
+              <img src="/images/team/CV.jpeg" alt="Cyrille Violle" style="object-position: center 20%;">
+            </div>
+            <h3 class="member-name">Cyrille Violle</h3>
+            <p class="member-role">Professor</p>
+            <p class="member-affiliation">CEFE, CNRS</p>
+            <div class="expertise-tags">
+              <span class="expertise-tag">Functional Ecology</span>
+              <span class="expertise-tag">Community Ecology</span>
+              <span class="expertise-tag">Macroecology</span>
+              <span class="expertise-tag">Functional Biogeography</span>
+              <span class="expertise-tag">Agroecology</span>
+            </div>
+            <div class="member-links">
+              <a href="https://scholar.google.com/citations?hl=en&user=Vz4gFNcAAAAJ" target="_blank" class="member-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M9.09 9A3 3 0 0 1 15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Google Scholar
+              </a>
+            </div>
+          </div>
+
+          <!-- Nicolas Mathevon -->
+          <div class="team-card">
+            <div class="member-initials">
+              <img src="/images/team/NM.jpg" alt="Nicolas Mathevon">
+            </div>
+            <h3 class="member-name">Nicolas Mathevon</h3>
+            <p class="member-role">Professor</p>
+            <p class="member-affiliation">ENES Lab, University of Saint-Étienne</p>
+            <div class="expertise-tags">
+              <span class="expertise-tag">Bioacoustics</span>
+              <span class="expertise-tag">Ethology</span>
+              <span class="expertise-tag">Evolution of Acoustic Communication</span>
+              <span class="expertise-tag">Acoustic Information Coding</span>
+            </div>
+            <div class="member-links">
+              <a href="https://scholar.google.com/citations?hl=en&user=5mHJ3zcAAAAJ" target="_blank" class="member-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M9.09 9A3 3 0 0 1 15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Google Scholar
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Research Laboratories Section -->
+      <section class="section">
+        <h2 class="section-title">Research Laboratories</h2>
+
+        <div class="card">
+          <h3 class="card-title">ENES Bioacoustics Research Lab</h3>
+          <p class="card-text">CRNL, CNRS, Inserm</p>
+          <p class="card-text">University of Saint-Étienne, Saint-Étienne, France</p>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">CEFE</h3>
+          <p class="card-text">CNRS, University of Montpellier</p>
+          <p class="card-text">EPHE-PSL University, France</p>
+        </div>
+      </section>
+
+      <!-- Funding Section -->
+      <section class="section">
+        <h2 class="section-title">Funding</h2>
+        <div class="card">
+          <p class="card-text">
+            This research has been supported by the <strong>University of Saint-Etienne</strong>, the <strong>Ecole Pratique des Hautes Etudes</strong>,
+            the <strong>University Paris-Sciences-Lettres</strong> (PhD stipend to QB), the <strong>Labex CeLyA</strong>, the <strong>CNRS</strong>, the <strong>Inserm</strong>, the <strong>Institut
+            universitaire de France</strong> (NM), the <strong>ACOUCENE group</strong> (<strong>CESAB</strong>, <strong>French Foundation for Research on Biodiversity</strong>, <strong>French
+            Ministry of Ecological Transition</strong>, <strong>French Office for Biodiversity</strong>). We are deeply grateful to the <strong>XENO-CANTO</strong> citizen
+            science database and all its contributors.
+          </p>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="section" style="margin-bottom: 1.5rem;">
+        <h2 class="section-title">Contact</h2>
+
+        <div class="card">
+          <p class="card-text">
+            For inquiries, please contact:
+            <a href="mailto:qbacquele@gmail.com" class="contact-link">qbacquele@gmail.com</a>
+          </p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2025 Quentin Bacquelé. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

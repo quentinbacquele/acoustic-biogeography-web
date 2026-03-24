@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acoustic Biogeography</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --accent: #BA5A31;
+        --text-secondary: #4a4a4a;
+        --bg-primary: #fafafa;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        overscroll-behavior: none;
+      }
+
+      html.smooth-scroll {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+        overflow-x: hidden;
+        overscroll-behavior-y: none;
+      }
+
+      .mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      /* Navigation */
+      .nav {
+        position: fixed;
+        top: 2rem;
+        left: 2rem;
+        right: 2rem;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      @media (max-width: 768px) {
+        .nav {
+          top: 1rem;
+          left: 1rem;
+          right: 1rem;
+          padding: 0.75rem 1.5rem;
+        }
+
+        .nav-brand {
+          font-size: 0.9rem !important;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+
+      .nav:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        font-family: 'Manrope', sans-serif;
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 400;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0;
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--accent);
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      /* Hero Section */
+      .landing-section {
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 4.5rem;
+        background: #FAFAFA;
+      }
+
+      @media (max-width: 768px) {
+        .landing-section {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+      }
+
+      .landing-bg {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 46%;
+        height: 100%;
+        background-image: url('/images/landing/cover_image.png');
+        background-size: contain;
+        background-position: right 70%;
+        background-repeat: no-repeat;
+        z-index: 1;
+      }
+
+      @media (max-width: 1600px) {
+        .landing-bg {
+          width: 48%;
+        }
+      }
+
+      @media (max-width: 1400px) {
+        .landing-bg {
+          width: 50%;
+          opacity: 0.25;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .landing-bg {
+          width: 100%;
+          opacity: 0.2;
+          background-position: center center;
+        }
+      }
+
+      .landing-content {
+        position: relative;
+        z-index: 2;
+        text-align: left;
+        color: white;
+      }
+
+      .display-title {
+        font-family: 'Manrope', sans-serif;
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: var(--accent);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-top: 0;
+        max-width: 900px;
+      }
+
+      .subtitle {
+        font-family: 'Manrope', sans-serif;
+        font-size: 1.5rem;
+        line-height: 1.6;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.8);
+        text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+        margin-left: 0.25rem;
+        max-width: 500px;
+        margin-top: 1rem;
+      }
+
+      /* Map Section */
+      .map-section {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        background-color: #000;
+        color: #fff;
+      }
+
+      #map-container {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        pointer-events: none;
+      }
+
+      .control-toolbar {
+        display: inline-flex;
+        align-items: flex-end;
+        gap: 20px;
+        pointer-events: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .view-toggle-row {
+        display: flex;
+        gap: 12px;
+      }
+
+      .view-toggle-row button {
+        width: 150px;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.08);
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+
+      #panel-toggle-btn {
+        display: none;
+      }
+
+      .panel-toggle-btn {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .panel-toggle-btn.active {
+        background: rgba(59, 130, 246, 0.85);
+        border-color: rgba(59, 130, 246, 1);
+      }
+
+      .side-panel {
+        position: absolute;
+        top: 120px;
+        width: 260px;
+        padding: 18px;
+        border-radius: 14px;
+        background: rgba(15, 23, 42, 0.86);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(16px);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        z-index: 950;
+        max-height: calc(100vh - 140px);
+        overflow-y: auto;
+      }
+
+      .side-panel::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .side-panel::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+      }
+
+      .panel-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+      }
+
+      .slide-panel {
+        --drag-offset: 0px;
+        right: 20px;
+        display: flex;
+        transform: translateX(calc(320px + var(--drag-offset)));
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+      }
+
+      .slide-panel.panel-visible {
+        transform: translateX(var(--drag-offset));
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .panel-drag-handle {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 8px;
+        cursor: grab;
+      }
+
+      .panel-drag-handle::before {
+        content: '';
+        width: 44px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.35);
+      }
+
+      .panel-dragging .panel-drag-handle {
+        cursor: grabbing;
+      }
+
+      .panel-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .panel-group.panel-stack + .panel-group.panel-stack {
+        margin-top: 12px;
+      }
+
+      .panel-group label {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.82);
+        margin-bottom: 0;
+      }
+
+      .panel-select,
+      .panel-button {
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 10px 14px;
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+      }
+
+      .panel-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding-right: 34px;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px;
+      }
+
+      .panel-select option {
+        background: #1e293b;
+        color: white;
+      }
+
+      .space-highlight-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .side-panel .panel-select,
+      .space-select {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+
+      .space-highlight-stack .species-search-wrapper,
+      .space-highlight-stack .species-search-wrapper input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .info-panel-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .info-panel-grid .panel-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-height: 70px;
+      }
+
+      .panel-group.panel-hidden {
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .space-action-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .space-action-group button {
+        width: 100%;
+      }
+
+      .action-button-stack {
+        position: relative;
+        min-height: 46px;
+      }
+
+      .action-button-stack button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+
+      .panel-button.button-hidden {
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .umap-plot {
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.45);
+        padding: 8px;
+        min-height: 160px;
+      }
+
+      .umap-plot canvas {
+        width: 100%;
+        height: 160px;
+        display: block;
+      }
+
+      .umap-overlay {
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        right: 12px;
+        transform: translateY(-50%);
+        text-align: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.65);
+        pointer-events: none;
+      }
+
+      .species-list {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.55);
+        padding: 8px 10px;
+        max-height: 150px;
+        overflow-y: auto;
+      }
+
+      .species-list::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .species-list::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+      }
+
+      .species-list-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.9);
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .species-list-item:last-child {
+        border-bottom: none;
+      }
+
+      .species-list-item span {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        min-width: 26px;
+        letter-spacing: 0.05em;
+      }
+
+      .species-list-empty {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        padding: 8px 0;
+      }
+
+      @media (max-width: 1024px) {
+        .control-panel {
+          top: auto;
+          bottom: 100px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .view-toggle-row {
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .view-toggle-row button {
+          width: 100%;
+        }
+
+        .side-panel {
+          position: static;
+          width: 100%;
+          margin-top: 12px;
+        }
+
+        .panel-row {
+          flex-direction: column;
+        }
+      }
+
+      .control-group {
+        margin-bottom: 0;
+        min-width: 180px;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .control-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .control-group select,
+      .control-group button {
+        width: auto;
+        min-width: 140px;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      .control-group select {
+        background: rgba(255, 255, 255, 0.1);
+        padding-right: 36px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 18px;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .control-group button {
+        background: rgba(255, 255, 255, 0.1);
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .control-group select option {
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+      }
+
+      .control-group select:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .control-group button:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .control-group button {
+        font-weight: 500;
+      }
+
+      .control-group input[type="text"],
+      .control-group input[type="search"],
+      .panel-group input[type="text"],
+      .panel-group input[type="search"] {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        cursor: text;
+      }
+
+      .control-group input[type="text"]:hover,
+      .control-group input[type="search"]:hover,
+      .control-group input[type="text"]:focus,
+      .control-group input[type="search"]:focus,
+      .panel-group input[type="text"]:hover,
+      .panel-group input[type="search"]:hover,
+      .panel-group input[type="text"]:focus,
+      .panel-group input[type="search"]:focus {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        outline: none;
+      }
+
+      .control-group input[type="text"]::placeholder,
+      .control-group input[type="search"]::placeholder,
+      .panel-group input[type="text"]::placeholder,
+      .panel-group input[type="search"]::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Ensure family search control doesn't overflow */
+      #family-search-control {
+        max-height: calc(100vh - 200px);
+        overflow: visible;
+      }
+
+      /* Fix datalist dropdown positioning */
+      #family-search {
+        position: relative;
+      }
+
+      /* Spectrogram display */
+      .spectrogram-container {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 8px;
+        backdrop-filter: blur(10px);
+        width: 140px;
+        height: 70px;
+      }
+
+      .spectrogram-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        display: block;
+      }
+
+      /* Species legend */
+      #species-legend-panel {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px 20px;
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        color: white;
+        font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        z-index: 1000;
+        max-width: 250px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: none;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      #species-legend-panel::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      #species-legend-panel::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      #species-legend-panel::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+      }
+
+      #species-legend-panel::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      #acoustic-space-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+      }
+
+      @media (max-width: 1024px) {
+        .control-toolbar {
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+          gap: 12px;
+        }
+
+        .control-group,
+        .view-toggle-row button {
+          width: 100%;
+        }
+
+        .control-group {
+          min-width: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        #controls {
+          padding: 0 16px;
+        }
+
+        .legend-responsive {
+          bottom: 80px !important;
+          left: 8px !important;
+          padding: 8px 10px !important;
+          font-size: 9px !important;
+          max-width: 160px !important;
+          line-height: 1.2 !important;
+        }
+
+        .legend-responsive > div:first-child {
+          font-size: 11px !important;
+          margin-bottom: 6px !important;
+        }
+
+        .legend-responsive #color-legend > div {
+          margin-bottom: 2px !important;
+        }
+      }
+
+      * {
+        touch-action: manipulation;
+      }
+
+      @media (max-width: 768px) {
+        #map-canvas,
+        #acoustic-space-container {
+          width: 100vw !important;
+          height: 100vh !important;
+        }
+      }
+
+      /* Spectrogram panel */
+      #spectrogram-panel {
+        position: fixed;
+        right: 32px;
+        bottom: 28px;
+        transform: none;
+        background: rgba(0, 0, 0, 0.9);
+        padding: 20px;
+        border-radius: 18px;
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        z-index: 1000;
+        display: none;
+        width: 360px;
+        box-shadow: 0 12px 44px rgba(0, 0, 0, 0.5);
+      }
+
+      #spectrogram-panel.visible {
+        display: block;
+        animation: spectrogramSlideUp 0.45s ease-out;
+      }
+
+      @keyframes spectrogramSlideUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #spectrogram-panel h3 {
+        color: white;
+        font-family: 'Manrope', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        text-align: center;
+      }
+
+      #spectrogram-image {
+        width: 100%;
+        border-radius: 8px;
+        display: block;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @media (max-width: 768px) {
+        #spectrogram-panel {
+          left: auto;
+          right: 12px;
+          bottom: 12px;
+          width: calc(100vw - 24px);
+          max-width: 360px;
+          padding: 14px;
+        }
+
+        #spectrogram-panel h3 {
+          font-size: 12px;
+          margin-bottom: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: 10000; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+      <div style="background: white; padding: 3rem; border-radius: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 400px; width: 90%;">
+        <h2 style="margin: 0 0 1rem 0; color: #333; font-size: 1.5rem;">Private Access</h2>
+        <p style="margin: 0 0 1.5rem 0; color: #666;">Please enter the password to continue</p>
+        <div style="position: relative; width: 100%; margin-bottom: 1rem;">
+          <input type="password" id="password-input" placeholder="Enter password" style="width: 100%; padding: 0.75rem 2.5rem 0.75rem 0.75rem; border: 2px solid #e0e0e0; border-radius: 0.5rem; font-size: 1rem; box-sizing: border-box;" />
+          <button id="password-toggle" aria-label="Toggle password visibility" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #667eea; font-weight: 600;">Show</button>
+        </div>
+        <button id="password-submit" style="width: 100%; padding: 0.75rem; background: #667eea; color: white; border: none; border-radius: 0.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">Access Site</button>
+        <p id="password-error" style="margin: 1rem 0 0 0; color: #e74c3c; font-size: 0.875rem; display: none;">Incorrect password</p>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        const correctPassword = 'bird'; // Change this to your desired password
+        const overlay = document.getElementById('password-overlay');
+        const input = document.getElementById('password-input');
+        const submit = document.getElementById('password-submit');
+        const error = document.getElementById('password-error');
+        const toggle = document.getElementById('password-toggle');
+
+        // Check if already authenticated
+        if (sessionStorage.getItem('authenticated') === 'true') {
+          overlay.style.display = 'none';
+          return;
+        }
+
+        function checkPassword() {
+          if (input.value === correctPassword) {
+            sessionStorage.setItem('authenticated', 'true');
+            overlay.style.display = 'none';
+          } else {
+            error.style.display = 'block';
+            input.value = '';
+            input.focus();
+          }
+        }
+
+        submit.addEventListener('click', checkPassword);
+        toggle.addEventListener('click', () => {
+          const isPassword = input.getAttribute('type') === 'password';
+          input.setAttribute('type', isPassword ? 'text' : 'password');
+          toggle.textContent = isPassword ? 'Hide' : 'Show';
+        });
+        input.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') checkPassword();
+        });
+
+        input.focus();
+      })();
+    </script>
+
+    <nav class="nav">
+      <a href="index.html" class="mono nav-brand" style="font-weight: 400; text-decoration: none; color: #4a4a4a; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">ACOUSTIC BIOGEOGRAPHY</a>
+      <div class="nav-links">
+        <a href="#map" id="map-link">Interactive Visualization</a>
+        <a href="about.html">About</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="landing-section">
+      <div class="landing-bg"></div>
+      <div class="landing-content">
+        <h1 class="display-title">The global biogeography of passerine songs</h1>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map" class="map-section">
+      <div id="controls">
+        <div class="control-toolbar">
+          <div class="control-group" id="data-view-control">
+            <label style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;">Data View</label>
+            <div class="view-toggle-row">
+              <button id="map-view-btn" class="view-toggle-btn" style="background: rgba(59, 130, 246, 0.8); border-color: rgba(59, 130, 246, 0.9);">
+                Map
+              </button>
+              <button id="space-view-btn" class="view-toggle-btn" style="background: rgba(155, 155, 155, 0.3); border-color: rgba(155, 155, 155, 0.5);">
+                Acoustic Space
+              </button>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="map-side-panel" class="control-panel side-panel slide-panel" style="display: none;">
+        <div class="panel-drag-handle" id="map-panel-drag-handle" aria-hidden="true"></div>
+        <div class="info-panel-grid">
+          <div class="panel-group" id="strategy-control">
+            <label for="strategy-select">Acoustic Motif</label>
+            <select id="strategy-select" class="panel-select">
+              <option value="0">Flat Whistles</option>
+              <option value="5">Slow Mod. Whistles</option>
+              <option value="6">Fast Mod. Whistles</option>
+              <option value="1">Slow Trills</option>
+              <option value="2">Fast Trills</option>
+              <option value="4">Ultrafast Trills</option>
+              <option value="7">Harmonic Stacks</option>
+              <option value="3">Chaotic Notes</option>
+              <option value="dominant">Dominant Motif</option>
+            </select>
+          </div>
+          <div class="panel-group panel-stack" id="spectrogram-control" style="display: none;">
+            <label>Spectrogram Preview</label>
+            <div class="spectrogram-container">
+              <img id="strategy-spectrogram" src="" alt="Motif spectrogram">
+            </div>
+          </div>
+          <div class="panel-group panel-stack" id="grid-species-panel">
+            <label>Species in Cell</label>
+            <div class="species-list" id="grid-species-list">
+              <div class="species-list-empty">Click a map cell to view the species found there.</div>
+            </div>
+          </div>
+          <div class="panel-group panel-stack" id="grid-umap-panel">
+            <label>Song Space (UMAP)</label>
+            <div class="umap-plot">
+              <canvas id="grid-umap-canvas"></canvas>
+              <div id="grid-umap-empty" class="umap-overlay">Click a map cell to see its sample distribution.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="space-side-panel" class="control-panel side-panel slide-panel" style="display: none;">
+        <div class="panel-drag-handle" id="space-panel-drag-handle" aria-hidden="true"></div>
+        <div class="info-panel-grid">
+          <div class="panel-group panel-hidden" id="color-mode-control">
+            <label for="color-mode-select">Color By</label>
+            <select id="color-mode-select" class="panel-select">
+              <option value="family" selected>Family</option>
+              <option value="syndrome">Motif</option>
+              <option value="species">Species</option>
+            </select>
+          </div>
+          <div class="panel-group highlight-control panel-hidden" id="dimension-filter-control">
+            <label id="dimension-filter-label" for="dimension-filter-select">Highlight Selection</label>
+            <div class="space-highlight-stack">
+              <select id="dimension-filter-select" class="panel-select space-select">
+                <option value="">All</option>
+              </select>
+              <div class="species-search-wrapper" id="dimension-species-wrapper" style="display: none;">
+                <input id="dimension-species-input" type="search" placeholder="Start typing a species" autocomplete="off" spellcheck="false" aria-label="Highlight species" list="dimension-species-options" disabled>
+                <datalist id="dimension-species-options"></datalist>
+              </div>
+            </div>
+            <small class="control-hint" id="dimension-filter-hint">Select an option to highlight.</small>
+          </div>
+          <div class="panel-group space-action-group panel-hidden" id="autopilot-control">
+            <label>Control</label>
+            <div class="action-button-stack">
+              <button id="autopilot-btn" class="panel-button">Auto-Pilot</button>
+              <button id="reset-filters-btn" class="panel-button secondary-action button-hidden" aria-hidden="true">Reset View</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="legend-panel" style="
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px 20px;
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        color: white;
+        font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        z-index: 1000;
+        max-width: 250px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      " class="legend-responsive">
+        <div style="font-weight: 600; margin-bottom: 10px; font-size: 14px;">Color Legend</div>
+        <div id="color-legend" style="line-height: 1.4;">
+          <!-- Legend will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <div id="species-legend-panel" class="legend-responsive" style="display: none;">
+        <div style="font-weight: 600; margin-bottom: 10px; font-size: 14px;">Species</div>
+        <div id="species-legend" style="line-height: 1.4;">
+          <!-- Species legend will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <div id="spectrogram-panel">
+        <h3>Spectrogram</h3>
+        <img id="spectrogram-image" src="" alt="Audio spectrogram">
+      </div>
+
+      <canvas id="map-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+      <div id="acoustic-space-container"></div>
+    </section>
+
+    <script type="module" src="./src/marine-map.ts"></script>
+    <script type="module" src="./src/parallax.js"></script>
+    <script>
+      // Handle instant scroll to map section
+      document.addEventListener('DOMContentLoaded', () => {
+        // Check if page loaded with #map hash and scroll immediately
+        if (window.location.hash === '#map') {
+          const mapSection = document.getElementById('map');
+          if (mapSection) {
+            mapSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+          }
+        }
+
+        const mapLink = document.getElementById('map-link');
+        if (mapLink) {
+          mapLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const mapSection = document.getElementById('map');
+            if (mapSection) {
+              mapSection.scrollIntoView({ behavior: 'auto', block: 'start' });
+            }
+          });
+        }
+        // Enable smooth scroll for other navigation
+        document.documentElement.classList.add('smooth-scroll');
+      });
+    </script>
+  </body>
+</html>
