@@ -16,6 +16,8 @@
     "vite": "^7.0.4"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "d3": "^7.9.0",
     "gsap": "^3.13.0",
     "three": "^0.178.0"
