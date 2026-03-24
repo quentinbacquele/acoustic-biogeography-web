@@ -172,7 +172,7 @@ class AcousticSpace {
     private readonly autoPilotSamplesPerSyndrome: number = 3;
     private readonly autoPilotPlaybackOrder: number[] = [0, 5, 6, 1, 2, 4, 7, 3];
 
-    // Predefined autopilot species from autopilot_selected_species.txt
+    // Predefined autopilot species for the guided playback sequence
     // Ordered by syndrome following the acoustic space legend order (0,1,2,3,4,5,6,7)
     private autoPilotSpeciesList: Array<{ species: string; file: string; expectedSyndrome: number }> = [
         // WHISTLES — slow to fast (0 → 5 → 6)
@@ -805,7 +805,7 @@ class AcousticSpace {
     }
 
     /**
-     * Find autopilot targets based on predefined species list from autopilot_selected_species.txt
+     * Find autopilot targets based on the predefined guided playback species list
      * Returns targets in the order defined in the species list
      */
     private findAutoPilotTargets(): Array<{
