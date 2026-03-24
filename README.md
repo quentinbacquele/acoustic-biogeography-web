@@ -23,4 +23,14 @@ The build output is generated in `dist/`.
 - Build command: `npm run build`
 - Output directory: `dist`
 
-The site serves its runtime assets from `public/`, including the compressed datasets, sounds, spectrograms, and image assets required by the globe and UMAP views.
+## Data layout
+
+The site serves only the runtime assets in `public/`:
+
+- `public/data/geographic_model_data_with_biomes.csv`
+- `public/data/ultra_optimized/`
+- `public/images/`
+- `public/sounds/`
+- `public/spectrograms/`
+
+Source and archival datasets are stored in `data_sources/` so they stay in the repository without being deployed as public assets.
