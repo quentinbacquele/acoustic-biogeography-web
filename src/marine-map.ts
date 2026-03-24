@@ -243,7 +243,8 @@ class AcousticSpace {
         this.controls.dampingFactor = 0.05;
         this.controls.minDistance = 50;
         this.controls.maxDistance = 1000;
-        // Zoom will be controlled by our custom wheel handler
+        this.controls.enableZoom = false;
+        // Zoom is handled by our custom wheel listener so page scroll remains the default.
 
         // Add resize listener for acoustic space
         window.addEventListener('resize', this.handleResize.bind(this));
@@ -469,21 +470,33 @@ class AcousticSpace {
             this.hideTooltip();
         }, { passive: true });
 
-        // Only allow zoom when Ctrl/Cmd is pressed to avoid interfering with page scroll
-        this.renderer.domElement.addEventListener('wheel', (e: WheelEvent) => {
-            if (!e.ctrlKey && !e.metaKey) {
-                // Disable zoom when Ctrl/Cmd is not pressed, allow page scroll
-                if (this.controls) {
-                    this.controls.enableZoom = false;
-                }
-                // Don't stop propagation - let the scroll pass through
-            } else {
-                // Allow zoom when Ctrl/Cmd is pressed
-                if (this.controls) {
-                    this.controls.enableZoom = true;
-                }
-            }
-        }, { passive: true });
+        this.renderer.domElement.addEventListener('wheel', this.handleAcousticSpaceWheel, { passive: false });
+    }
+
+    private handleAcousticSpaceWheel = (event: WheelEvent) => {
+        if (!this.controls || !this.camera) return;
+
+        // Preserve normal page scrolling unless the user explicitly requests zoom.
+        if (!event.ctrlKey && !event.metaKey) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const zoomMultiplier = event.deltaY < 0 ? 0.92 : 1.08;
+        const cameraOffset = this.camera.position.clone().sub(this.controls.target);
+        const currentDistance = cameraOffset.length();
+        if (currentDistance === 0) return;
+
+        const nextDistance = THREE.MathUtils.clamp(
+            currentDistance * zoomMultiplier,
+            this.controls.minDistance,
+            this.controls.maxDistance
+        );
+
+        cameraOffset.setLength(nextDistance);
+        this.camera.position.copy(this.controls.target.clone().add(cameraOffset));
+        this.controls.update();
     }
 
     private isDragging = false;
