@@ -85,7 +85,6 @@ export class OptimizedDataLoader {
             const response = await fetch(url, { 
                 signal: this.abortController.signal,
                 headers: {
-                    'Accept-Encoding': 'gzip, deflate, br',
                     'Accept': 'application/json'
                 }
             });
@@ -213,7 +212,10 @@ export class OptimizedDataLoader {
     /**
      * Load all biogeography data with optimized progressive loading
      */
-    async loadAllBiogeographyData(): Promise<{
+    async loadAllBiogeographyData(onEssentialData?: (data: {
+        gridData: any[];
+        dominantStrategyData: any[];
+    }) => void): Promise<{
         gridData: any[];
         traitsData: any[];
         dominantStrategyData: any[];
@@ -243,6 +245,7 @@ export class OptimizedDataLoader {
             });
 
             console.log('✅ Essential data loaded - globe can initialize!');
+            onEssentialData?.({ gridData, dominantStrategyData });
 
             // Stage 2: Load detailed data in parallel (optimized files)
             console.log('🎯 Stage 2: Loading optimized detailed data...');

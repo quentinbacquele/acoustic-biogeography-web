@@ -2029,7 +2029,11 @@ class App {
             console.log("Loading data for marine visualization...");
 
             // Load all data including dominant strategy data
-            const allData = await this.dataLoader.loadAllBiogeographyData();
+            const allData = await this.dataLoader.loadAllBiogeographyData(({ gridData, dominantStrategyData }) => {
+                this.marineMap.loadData(gridData, dominantStrategyData);
+                this.updateControlsVisibility();
+                this.updateLegend();
+            });
 
             // Load grid data for the map with dominant strategy data
             this.marineMap.loadData(allData.gridData, allData.dominantStrategyData, allData.speciesGridData);
