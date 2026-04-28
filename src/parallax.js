@@ -1,8 +1,3 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
-
 // Initialize parallax effect
 function initParallax() {
   const landingBg = document.querySelector('.landing-bg');
@@ -11,33 +6,35 @@ function initParallax() {
 
   if (!landingBg || !landingSection) return;
 
-  // Create parallax effect where background moves slower than scroll
-  // This creates the "stuck" effect
-  gsap.to(landingBg, {
-    y: () => window.innerHeight * 0.5, // Move down as we scroll
-    ease: 'none',
-    scrollTrigger: {
-      trigger: landingSection,
-      start: 'top top',
-      end: 'bottom top',
-      scrub: true // Smooth scrubbing effect
-    }
-  });
+  const navLinks = document.querySelectorAll('.nav a, .nav-links a');
+  let ticking = false;
 
-  // Nav bar color change based on scroll position
-  if (mapSection) {
-    ScrollTrigger.create({
-      trigger: mapSection,
-      start: 'top 140px', // When map section is 140px from top (nav height)
-      end: 'bottom top',
-      onEnter: () => {
-        gsap.to('.nav a, .nav-links a', { color: '#ffffff', duration: 0.3 });
-      },
-      onLeaveBack: () => {
-        gsap.to('.nav a, .nav-links a', { color: '#4a4a4a', duration: 0.3 });
-      }
-    });
-  }
+  const update = () => {
+    const landingRect = landingSection.getBoundingClientRect();
+    const offset = Math.max(0, -landingRect.top) * 0.5;
+    landingBg.style.transform = `translate3d(0, ${offset}px, 0)`;
+
+    if (mapSection) {
+      const mapRect = mapSection.getBoundingClientRect();
+      const onMap = mapRect.top <= 140 && mapRect.bottom > 140;
+      navLinks.forEach((link) => {
+        link.style.color = onMap ? '#ffffff' : '#4a4a4a';
+      });
+    }
+
+    ticking = false;
+  };
+
+  const requestUpdate = () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  };
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  update();
 }
 
 // Initialize when DOM is ready

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acoustic Biogeography</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preload" as="image" href="/images/landing/cover_image-1600.webp" imagesrcset="/images/landing/cover_image-1600.webp 1x, /images/landing/cover_image-2400.webp 2x" type="image/webp" fetchpriority="high">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
       :root {
@@ -145,10 +146,16 @@
         width: 46%;
         height: 100%;
         background-image: url('/images/landing/cover_image.png?v=20260324');
+        background-image: image-set(
+          url('/images/landing/cover_image-1600.webp?v=20260428') type('image/webp') 1x,
+          url('/images/landing/cover_image-2400.webp?v=20260428') type('image/webp') 2x,
+          url('/images/landing/cover_image.png?v=20260324') type('image/png') 2x
+        );
         background-size: contain;
         background-position: right 70%;
         background-repeat: no-repeat;
         z-index: 1;
+        will-change: transform;
       }
 
       @media (max-width: 1600px) {
@@ -538,8 +545,16 @@
       }
 
       @media (max-width: 768px) {
-        .view-toggle-row {
+        .map-section {
+          height: auto;
+          min-height: 0;
+          display: flex;
           flex-direction: column;
+          overflow: visible;
+        }
+
+        .view-toggle-row {
+          flex-direction: row;
           width: 100%;
         }
 
@@ -547,10 +562,60 @@
           width: 100%;
         }
 
-        .side-panel {
-          position: static;
+        #controls {
+          position: relative;
+          order: 2;
+          bottom: auto;
+          left: auto;
+          transform: none;
+          padding: 12px 14px 8px;
           width: 100%;
-          margin-top: 12px;
+          background: #000;
+          pointer-events: auto;
+        }
+
+        .side-panel {
+          position: relative;
+          order: 3;
+          top: auto;
+          right: auto;
+          bottom: auto;
+          width: calc(100% - 28px);
+          margin: 0 14px 16px;
+          max-height: none;
+          transform: none !important;
+          opacity: 1;
+          pointer-events: auto;
+          transition: none;
+        }
+
+        .panel-drag-handle {
+          display: none;
+        }
+
+        .info-panel-grid {
+          gap: 10px;
+        }
+
+        .info-panel-grid .panel-group {
+          min-height: 0;
+        }
+
+        .species-list {
+          max-height: 130px;
+        }
+
+        .umap-plot {
+          min-height: 130px;
+        }
+
+        .umap-plot canvas {
+          height: 130px;
+        }
+
+        #grid-species-panel,
+        #grid-umap-panel {
+          display: none;
         }
 
         .panel-row {
@@ -755,25 +820,12 @@
 
       @media (max-width: 768px) {
         #controls {
-          padding: 0 16px;
+          padding-left: 14px;
+          padding-right: 14px;
         }
 
         .legend-responsive {
-          bottom: 80px !important;
-          left: 8px !important;
-          padding: 8px 10px !important;
-          font-size: 9px !important;
-          max-width: 160px !important;
-          line-height: 1.2 !important;
-        }
-
-        .legend-responsive > div:first-child {
-          font-size: 11px !important;
-          margin-bottom: 6px !important;
-        }
-
-        .legend-responsive #color-legend > div {
-          margin-bottom: 2px !important;
+          display: none !important;
         }
       }
 
@@ -782,10 +834,24 @@
       }
 
       @media (max-width: 768px) {
-        #map-canvas,
-        #acoustic-space-container {
+        #map-canvas {
+          position: relative !important;
+          order: 1;
+          top: auto !important;
+          left: auto !important;
           width: 100vw !important;
-          height: 100vh !important;
+          height: clamp(240px, 60vw, 320px) !important;
+          min-height: 0;
+        }
+
+        #acoustic-space-container {
+          position: relative !important;
+          order: 1;
+          top: auto !important;
+          left: auto !important;
+          width: 100vw !important;
+          height: 64svh !important;
+          min-height: 390px;
         }
       }
 
@@ -1003,15 +1069,33 @@
     </section>
 
     <script type="module" src="./src/observability.ts"></script>
-    <script type="module" src="./src/marine-map.ts"></script>
     <script type="module" src="./src/parallax.js"></script>
-    <script>
+    <script type="module">
       // Handle instant scroll to map section
       document.addEventListener('DOMContentLoaded', () => {
+        let marineAppPromise;
+        const loadMarineApp = () => {
+          if (!marineAppPromise) {
+            marineAppPromise = import('./src/marine-map.ts').then(({ initMarineApp }) => initMarineApp());
+          }
+          return marineAppPromise;
+        };
+
+        const mapSection = document.getElementById('map');
+        if (mapSection && 'IntersectionObserver' in window) {
+          const observer = new IntersectionObserver((entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              loadMarineApp();
+              observer.disconnect();
+            }
+          }, { rootMargin: '350px 0px' });
+          observer.observe(mapSection);
+        }
+
         // Check if page loaded with #map hash and scroll immediately
         if (window.location.hash === '#map') {
-          const mapSection = document.getElementById('map');
           if (mapSection) {
+            loadMarineApp();
             mapSection.scrollIntoView({ behavior: 'auto', block: 'start' });
           }
         }
@@ -1020,8 +1104,8 @@
         if (mapLink) {
           mapLink.addEventListener('click', (e) => {
             e.preventDefault();
-            const mapSection = document.getElementById('map');
             if (mapSection) {
+              loadMarineApp();
               mapSection.scrollIntoView({ behavior: 'auto', block: 'start' });
             }
           });

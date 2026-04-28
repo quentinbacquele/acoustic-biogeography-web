@@ -56,6 +56,49 @@ const strategyNames: { [key: number]: string } = {
     7: 'Harmonic Stacks'
 };
 
+function escapeHtml(value: unknown): string {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char] || char));
+}
+
+const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+let pendingSafariScrollX = 0;
+let pendingSafariScrollY = 0;
+let safariScrollFrame: number | null = null;
+
+function forwardSafariWheelToPage(event: WheelEvent): boolean {
+    if (!isSafariBrowser || event.ctrlKey || event.metaKey) {
+        return false;
+    }
+
+    const unit = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+        ? 16
+        : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+            ? window.innerHeight
+            : 1;
+
+    event.preventDefault();
+    const safariScrollMultiplier = 1.35;
+    pendingSafariScrollX += event.deltaX * unit * safariScrollMultiplier;
+    pendingSafariScrollY += event.deltaY * unit * safariScrollMultiplier;
+
+    if (safariScrollFrame === null) {
+        safariScrollFrame = requestAnimationFrame(() => {
+            window.scrollBy(pendingSafariScrollX, pendingSafariScrollY);
+            pendingSafariScrollX = 0;
+            pendingSafariScrollY = 0;
+            safariScrollFrame = null;
+        });
+    }
+
+    return true;
+}
+
 const DEFAULT_AUTO_PILOT_DIRECTION = new THREE.Vector3(0.62, 0.78, 0.45).normalize();
 const DEFAULT_AUTO_PILOT_DISTANCE = 520;
 
@@ -476,6 +519,10 @@ class AcousticSpace {
     private handleAcousticSpaceWheel = (event: WheelEvent) => {
         if (!this.controls || !this.camera) return;
 
+        if (forwardSafariWheelToPage(event)) {
+            return;
+        }
+
         // Preserve normal page scrolling unless the user explicitly requests zoom.
         if (!event.ctrlKey && !event.metaKey) {
             return;
@@ -541,7 +588,8 @@ class AcousticSpace {
         if (!this.tooltip) return;
 
         // Format species name by replacing _ with space
-        const formattedSpecies = (speciesData.species || 'Unknown').replace(/_/g, ' ');
+        const formattedSpecies = escapeHtml((speciesData.species || 'Unknown').replace(/_/g, ' '));
+        const family = escapeHtml(speciesData.family || 'Unknown');
 
         // Find dominant strategy
         const probs = [
@@ -554,8 +602,8 @@ class AcousticSpace {
 
         this.tooltip.innerHTML = `
             <div><strong>Species:</strong> ${formattedSpecies}</div>
-            <div><strong>Family:</strong> ${speciesData.family || 'Unknown'}</div>
-            <div><strong>Dominant Motif:</strong> ${dominantStrategyName} (${dominantProb}%)</div>
+            <div><strong>Family:</strong> ${family}</div>
+            <div><strong>Dominant Motif:</strong> ${escapeHtml(dominantStrategyName)} (${dominantProb}%)</div>
         `;
 
         this.tooltip.style.display = 'block';
@@ -1491,8 +1539,9 @@ class MarineMap {
     }
 
     public renderMap = () => {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        const rect = this.canvas.getBoundingClientRect();
+        this.canvas.width = Math.round(rect.width || this.canvas.clientWidth || window.innerWidth);
+        this.canvas.height = Math.round(rect.height || this.canvas.clientHeight || window.innerHeight);
 
         this.ctx.imageSmoothingEnabled = false;
 
@@ -1511,7 +1560,8 @@ class MarineMap {
         }
 
         this.mapX = (this.canvas.width - this.mapWidth) / 2;
-        this.mapY = (this.canvas.height - this.mapHeight) / 2 + this.canvas.height * 0.1;
+        const isMobileLayout = window.matchMedia('(max-width: 768px)').matches;
+        this.mapY = (this.canvas.height - this.mapHeight) / 2 + (isMobileLayout ? 0 : this.canvas.height * 0.1);
 
         const destWidth = this.mapWidth * this.zoom;
         const destHeight = this.mapHeight * this.zoom;
@@ -1579,7 +1629,7 @@ class MarineMap {
         this.canvas.addEventListener('mouseup', this.handleMouseUp);
         this.canvas.addEventListener('mouseleave', this.handleMouseUp);
         this.canvas.addEventListener('click', this.handleMapClick);
-        this.canvas.addEventListener('wheel', this.handleWheel);
+        this.canvas.addEventListener('wheel', this.handleWheel, { passive: false });
     }
 
     private handleMouseDown = (e: MouseEvent) => {
@@ -1708,6 +1758,10 @@ class MarineMap {
     }
 
     private handleWheel = (e: WheelEvent) => {
+        if (forwardSafariWheelToPage(e)) {
+            return;
+        }
+
         // Only zoom when Ctrl (or Cmd on Mac) is pressed, otherwise allow normal scrolling
         if (!e.ctrlKey && !e.metaKey) {
             return;
@@ -2066,7 +2120,7 @@ class App {
     private buildSpeciesOptionsHTML(entries: SpeciesEntry[]): string {
         return entries.map(entry => {
             const displayLabel = `${entry.label} · ${entry.family}`;
-            return `<option value="${entry.label}" label="${displayLabel}"></option>`;
+            return `<option value="${escapeHtml(entry.label)}" label="${escapeHtml(displayLabel)}"></option>`;
         }).join('');
     }
 
@@ -2074,7 +2128,7 @@ class App {
         const options = ['<option value="">All Species</option>'];
         for (const entry of entries) {
             const displayLabel = `${entry.label} · ${entry.family}`;
-            options.push(`<option value="${entry.id}">${displayLabel}</option>`);
+            options.push(`<option value="${escapeHtml(entry.id)}">${escapeHtml(displayLabel)}</option>`);
         }
         return options.join('');
     }
@@ -2245,7 +2299,7 @@ class App {
         this.speciesFilterWrapper.style.display = 'none';
         if (mode === 'syndrome') {
             const options = Object.entries(strategyNames).map(([value, label]) =>
-                `<option value="${value}">${label}</option>`
+                `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`
             ).join('');
             this.dimensionFilterSelect.innerHTML = `<option value="">All Motifs</option>${options}`;
             this.dimensionFilterHint.textContent = 'Choose a motif to emphasize.';
@@ -2253,7 +2307,7 @@ class App {
             this.dimensionFilterSelect.value = active !== null ? String(active) : '';
         } else {
             const familyOptions = this.families.map(family =>
-                `<option value="${family}">${family}</option>`
+                `<option value="${escapeHtml(family)}">${escapeHtml(family)}</option>`
             ).join('');
             this.dimensionFilterSelect.innerHTML = `<option value="">All Families</option>${familyOptions}`;
             this.dimensionFilterHint.textContent = 'Select a family to highlight.';
@@ -2579,7 +2633,7 @@ class App {
         const rows = this.currentGridSpecies.map((species, index) => {
             const label = this.speciesIdToLabel.get(species) || this.formatSpeciesLabel(species);
             const order = (index + 1).toString().padStart(2, '0');
-            return `<div class="species-list-item"><span>${order}</span>${label}</div>`;
+            return `<div class="species-list-item"><span>${order}</span>${escapeHtml(label)}</div>`;
         }).join('');
         this.gridSpeciesList.innerHTML = rows;
     }
@@ -2829,6 +2883,11 @@ class App {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    new App();
-});
+let appInstance: App | null = null;
+
+export function initMarineApp() {
+    if (!appInstance) {
+        appInstance = new App();
+    }
+    return appInstance;
+}
