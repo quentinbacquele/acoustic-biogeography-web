@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listen to the eight song motifs</title>
+<meta name="description" content="Listen to the eight acoustic motifs around which the songs of the world's passerine birds concentrate (Bacquelé et al., Science, 2026).">
+<meta property="og:title" content="Listen to the eight song motifs">
+<meta property="og:description" content="Listen to the eight acoustic motifs of passerine song.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f3; --card: #ffffff; --ink: #17181a; --muted: #5e6166; --line: #e7e3da;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.55 Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 56px; }
+  .kicker { font: 600 12px/1.2 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  h1 { font: 800 clamp(30px, 7vw, 46px)/1.05 Manrope, sans-serif; letter-spacing: -.02em; margin: 0 0 14px; }
+  .lead { font-size: 17px; margin: 0 0 10px; }
+  .how { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--muted);
+          border-left: 3px solid var(--line); padding: 4px 0 4px 12px; margin: 18px 0 26px; }
+  .motif { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px 18px 14px;
+            margin: 0 0 16px; scroll-margin-top: 16px; transition: box-shadow .4s, border-color .4s; }
+  .motif.target { border-color: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 25%, transparent); }
+  .motif header { display: grid; grid-template-columns: auto 88px 1fr; gap: 12px; align-items: center; }
+  .num { font: 800 30px/1 Manrope, sans-serif; color: var(--c); min-width: 22px; }
+  .glyph { width: 88px; height: 44px; color: var(--c); }
+  h2 { font: 700 19px/1.2 Manrope, sans-serif; margin: 0; }
+  .desc { margin: 2px 0 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+  .player { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; margin: 14px 0 8px; }
+  .play { width: 56px; height: 56px; border-radius: 50%; border: 0; background: var(--c); color: #fff; cursor: pointer;
+           display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+  .play svg { width: 26px; height: 26px; fill: currentColor; }
+  .play .i-pause, .motif.playing .play .i-play { display: none; }
+  .motif.playing .play .i-pause { display: block; }
+  .play:focus-visible, .spectro:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .spectro { position: relative; border-radius: 10px; background: #0b0d12; overflow: hidden; cursor: pointer; aspect-ratio: 15 / 4; }
+  .spectro img { display: block; width: 100%; height: 100%; object-fit: fill; }
+  .head { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #fff; opacity: 0; transform: translateX(0); }
+  .motif.playing .head, .motif.paused .head { opacity: .85; }
+  .scale { margin: -2px 0 4px; font-size: 11px; color: var(--muted); text-align: right; }
+  .bird { margin: 2px 0 2px; font-size: 15px; }
+  .bird em { color: var(--muted); margin-left: 4px; }
+  .credit { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .credit a, footer a { color: inherit; }
+  footer { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 20px; font-size: 14px; color: var(--muted); }
+  footer ul { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; }
+  footer li a { color: var(--ink); font-weight: 600; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  @media (max-width: 420px) {
+    .motif header { grid-template-columns: auto 64px 1fr; gap: 10px; }
+    .glyph { width: 64px; height: 32px; }
+    .player { grid-template-columns: 48px 1fr; }
+    .play { width: 48px; height: 48px; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Bacquelé et al. · <i>Science</i> · 2026</p>
+  <h1>Listen to the eight song motifs</h1>
+  <p class="lead">We analysed 116,792 songs from 3,160 passerine species. Their acoustic structure forms a continuum that concentrates around eight poles, the acoustic motifs. Birds combine these building blocks into their own songs. Tap ▶ to hear each one.</p>
+  <p class="how">Each recording is shown as a spectrogram: time runs from left to right (12 s) and high pitches are at the top. The frequency range is adapted to each motif and given below its spectrogram. Tap a spectrogram to play from that point.</p>
+  
+    <article class="motif" id="flat-whistles" style="--c:#785EF0">
+      <header>
+        <span class="num">1</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 40 H68" stroke-width="7"/><path d="M92 40 H144" stroke-width="7"/></g></svg>
+        <div class="titles">
+          <h2>Flat Whistles</h2>
+          <p class="desc">Tonal notes whose frequency stays almost constant.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Flat Whistles, Three-wattled Bellbird">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/01_flat-whistles.webp" alt="Spectrogram of the recording: flat whistles" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/01_flat-whistles.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 1.2–4.2 kHz</p>
+      <p class="bird"><strong>Three-wattled Bellbird</strong> <em>Procnias tricarunculatus</em></p>
+      <p class="credit">Recording: Babbage · <a href="https://commons.wikimedia.org/wiki/File:Three-wattled-bellbird.webm" rel="noopener">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener license">CC BY 4.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="slow-modulated-whistles" style="--c:#D55E00">
+      <header>
+        <span class="num">2</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 28 C36 28 46 52 70 54" stroke-width="7"/><path d="M90 28 C112 28 122 52 146 54" stroke-width="7"/></g></svg>
+        <div class="titles">
+          <h2>Slow Modulated Whistles</h2>
+          <p class="desc">Tonal notes whose frequency changes slowly.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Slow Modulated Whistles, Eurasian Bullfinch">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/02_slow-modulated-whistles.webp" alt="Spectrogram of the recording: slow modulated whistles" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/02_slow-modulated-whistles.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 2–7.5 kHz</p>
+      <p class="bird"><strong>Eurasian Bullfinch</strong> <em>Pyrrhula pyrrhula</em></p>
+      <p class="credit">Recording: Benoît Van Hecke · <a href="https://commons.wikimedia.org/wiki/File:Pyrrhula_pyrrhula_-_Eurasian_Bullfinch_XC543712.mp3" rel="noopener">Wikimedia Commons / Xeno-canto XC543712</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener license">CC BY-SA 4.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="fast-modulated-whistles" style="--c:#CC79A7">
+      <header>
+        <span class="num">3</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.0 30.0 L10.6 30.5 L11.2 31.4 L11.8 32.5 L12.4 33.9 L13.0 35.2 L13.6 36.5 L14.2 37.5 L14.8 38.2 L15.4 38.4 L16.0 38.1 L16.6 37.3 L17.2 36.0 L17.8 34.4 L18.4 32.6 L19.0 30.8 L19.6 29.1 L20.2 27.7 L20.8 26.8 L21.4 26.5 L22.0 26.7 L22.6 27.6 L23.2 29.0 L23.8 30.9 L24.4 33.2 L25.0 35.7 L25.6 38.5 L26.2 41.2 L26.8 43.8 L27.4 46.1 L28.0 48.1 L28.6 49.6 L29.2 50.6 L29.8 51.0 L30.4 50.8 L31.0 50.1 L31.6 48.8 L32.2 47.2 L32.8 45.4 L33.4 43.3 L34.0 41.3 L34.6 39.3 L35.2 37.6 L35.8 36.3 L36.4 35.4 L37.0 35.1 L37.6 35.4 L38.2 36.2 L38.8 37.6 L39.4 39.4 L40.0 41.7 L40.6 44.2 L41.2 46.9 L41.8 49.6 L42.4 52.3 L43.0 54.6 L43.6 56.6 L44.2 58.2 L44.8 59.2 L45.4 59.6 L46.0 59.5" stroke-width="5.5"/><path d="M62.0 50.0 L62.6 50.5 L63.2 50.8 L63.8 50.8 L64.4 50.5 L65.0 49.8 L65.6 48.6 L66.2 47.1 L66.8 45.4 L67.4 43.5 L68.0 41.6 L68.6 39.9 L69.2 38.5 L69.8 37.6 L70.4 37.2 L71.0 37.4 L71.6 38.2 L72.2 39.5 L72.8 41.2 L73.4 43.2 L74.0 45.3 L74.6 47.4 L75.2 49.2 L75.8 50.7 L76.4 51.7 L77.0 52.2 L77.6 52.2 L78.2 51.6 L78.8 50.4 L79.4 48.7 L80.0 46.6 L80.6 44.2 L81.2 41.6 L81.8 38.9 L82.4 36.2 L83.0 33.8 L83.6 31.7 L84.2 30.0 L84.8 28.9 L85.4 28.3 L86.0 28.3 L86.6 28.8 L87.2 29.9 L87.8 31.4 L88.4 33.2 L89.0 35.2 L89.6 37.3 L90.2 39.4 L90.8 41.2 L91.4 42.7 L92.0 43.8 L92.6 44.4 L93.2 44.4 L93.8 43.8 L94.4 42.7 L95.0 41.1 L95.6 39.0 L96.2 36.6 L96.8 34.0 L97.4 31.3 L98.0 28.6" stroke-width="5.5"/><path d="M114.0 34.0 L114.6 34.9 L115.2 35.9 L115.8 37.1 L116.4 38.2 L117.0 39.1 L117.6 39.6 L118.2 39.8 L118.8 39.5 L119.4 38.8 L120.0 37.6 L120.6 36.1 L121.2 34.4 L121.8 32.7 L122.4 31.2 L123.0 29.9 L123.6 29.1 L124.2 28.8 L124.8 29.2 L125.4 30.2 L126.0 31.7 L126.6 33.7 L127.2 36.1 L127.8 38.7 L128.4 41.4 L129.0 44.0 L129.6 46.4 L130.2 48.5 L130.8 50.2 L131.4 51.4 L132.0 52.0 L132.6 52.0 L133.2 51.5 L133.8 50.5 L134.4 49.0 L135.0 47.2 L135.6 45.1 L136.2 43.0 L136.8 40.9 L137.4 39.0 L138.0 37.4 L138.6 36.3 L139.2 35.6 L139.8 35.5 L140.4 35.9 L141.0 37.0 L141.6 38.5 L142.2 40.5 L142.8 42.9 L143.4 45.4 L144.0 48.1 L144.6 50.7 L145.2 53.2 L145.8 55.3 L146.4 57.0 L147.0 58.2 L147.6 58.9 L148.2 59.0 L148.8 58.5 L149.4 57.6 L150.0 56.1" stroke-width="5.5"/></g></svg>
+        <div class="titles">
+          <h2>Fast Modulated Whistles</h2>
+          <p class="desc">Tonal notes with fast, wide frequency modulations.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Fast Modulated Whistles, Eurasian Wren">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/03_fast-modulated-whistles.webp" alt="Spectrogram of the recording: fast modulated whistles" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/03_fast-modulated-whistles.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 2.5–9.5 kHz</p>
+      <p class="bird"><strong>Eurasian Wren</strong> <em>Troglodytes troglodytes</em></p>
+      <p class="credit">Recording: Grantus4504 · <a href="https://commons.wikimedia.org/wiki/File:Troglodytes_troglodytes_song.ogg" rel="noopener">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener license">CC BY-SA 3.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="slow-trills" style="--c:#E69F00">
+      <header>
+        <span class="num">4</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 26 Q26 30 34 52" stroke-width="6.5"/><path d="M46 26 Q54 30 62 52" stroke-width="6.5"/><path d="M74 26 Q82 30 90 52" stroke-width="6.5"/><path d="M102 26 Q110 30 118 52" stroke-width="6.5"/><path d="M130 26 Q138 30 146 52" stroke-width="6.5"/></g></svg>
+        <div class="titles">
+          <h2>Slow Trills</h2>
+          <p class="desc">One element repeated at a slow rate.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Slow Trills, Willow Tit">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/04_slow-trills.webp" alt="Spectrogram of the recording: slow trills" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/04_slow-trills.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 2.5–6.5 kHz</p>
+      <p class="bird"><strong>Willow Tit</strong> <em>Poecile montanus</em></p>
+      <p class="credit">Recording: Vladimir Yu. Arkhipov · <a href="https://commons.wikimedia.org/wiki/File:Poecile_montanus.ogg" rel="noopener">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener license">CC BY-SA 3.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="fast-trills" style="--c:#009E73">
+      <header>
+        <span class="num">5</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.0 24 L18.0 56" stroke-width="4.5"/><path d="M25.5 24 L29.5 56" stroke-width="4.5"/><path d="M37.0 24 L41.0 56" stroke-width="4.5"/><path d="M48.5 24 L52.5 56" stroke-width="4.5"/><path d="M60.0 24 L64.0 56" stroke-width="4.5"/><path d="M71.5 24 L75.5 56" stroke-width="4.5"/><path d="M83.0 24 L87.0 56" stroke-width="4.5"/><path d="M94.5 24 L98.5 56" stroke-width="4.5"/><path d="M106.0 24 L110.0 56" stroke-width="4.5"/><path d="M117.5 24 L121.5 56" stroke-width="4.5"/><path d="M129.0 24 L133.0 56" stroke-width="4.5"/><path d="M140.5 24 L144.5 56" stroke-width="4.5"/></g></svg>
+        <div class="titles">
+          <h2>Fast Trills</h2>
+          <p class="desc">One element repeated at a fast rate.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Fast Trills, Wood Warbler">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/05_fast-trills.webp" alt="Spectrogram of the recording: fast trills" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/05_fast-trills.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 2.5–8 kHz</p>
+      <p class="bird"><strong>Wood Warbler</strong> <em>Phylloscopus sibilatrix</em></p>
+      <p class="credit">Recording: Jonn Leffmann · <a href="https://commons.wikimedia.org/wiki/File:Gr%C3%B6ns%C3%A5ngare_-_Phylloscopus_sibilatrix.ogg" rel="noopener">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by/3.0/" rel="noopener license">CC BY 3.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="ultrafast-trills" style="--c:#0072B2">
+      <header>
+        <span class="num">6</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12.0 26 L14.0 54" stroke-width="2.4"/><path d="M17.2 26 L19.2 54" stroke-width="2.4"/><path d="M22.4 26 L24.4 54" stroke-width="2.4"/><path d="M27.6 26 L29.6 54" stroke-width="2.4"/><path d="M32.8 26 L34.8 54" stroke-width="2.4"/><path d="M38.0 26 L40.0 54" stroke-width="2.4"/><path d="M43.2 26 L45.2 54" stroke-width="2.4"/><path d="M48.4 26 L50.4 54" stroke-width="2.4"/><path d="M53.6 26 L55.6 54" stroke-width="2.4"/><path d="M58.800000000000004 26 L60.800000000000004 54" stroke-width="2.4"/><path d="M64.0 26 L66.0 54" stroke-width="2.4"/><path d="M69.2 26 L71.2 54" stroke-width="2.4"/><path d="M74.4 26 L76.4 54" stroke-width="2.4"/><path d="M79.60000000000001 26 L81.60000000000001 54" stroke-width="2.4"/><path d="M84.8 26 L86.8 54" stroke-width="2.4"/><path d="M90.0 26 L92.0 54" stroke-width="2.4"/><path d="M95.2 26 L97.2 54" stroke-width="2.4"/><path d="M100.4 26 L102.4 54" stroke-width="2.4"/><path d="M105.60000000000001 26 L107.60000000000001 54" stroke-width="2.4"/><path d="M110.8 26 L112.8 54" stroke-width="2.4"/><path d="M116.0 26 L118.0 54" stroke-width="2.4"/><path d="M121.2 26 L123.2 54" stroke-width="2.4"/><path d="M126.4 26 L128.4 54" stroke-width="2.4"/><path d="M131.60000000000002 26 L133.60000000000002 54" stroke-width="2.4"/><path d="M136.8 26 L138.8 54" stroke-width="2.4"/><path d="M142.0 26 L144.0 54" stroke-width="2.4"/><path d="M147.20000000000002 26 L149.20000000000002 54" stroke-width="2.4"/></g></svg>
+        <div class="titles">
+          <h2>Ultrafast Trills</h2>
+          <p class="desc">One element repeated at a very high rate: to the ear, a buzz.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Ultrafast Trills, Bohemian Waxwing">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/06_ultrafast-trills.webp" alt="Spectrogram of the recording: ultrafast trills" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/06_ultrafast-trills.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 1.5–11 kHz</p>
+      <p class="bird"><strong>Bohemian Waxwing</strong> <em>Bombycilla garrulus</em></p>
+      <p class="credit">Recording: Doug Hynes · <a href="https://xeno-canto.org/935618" rel="noopener">Xeno-canto XC935618</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener license">CC BY-SA 4.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="chaotic-notes" style="--c:#C9B200">
+      <header>
+        <span class="num">7</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10 50 Q20 49 30 50" stroke-width="4.5"/><path d="M10 30 Q20 29 30 30" stroke-width="4.5"/><path d="M36 44 Q46 43 56 44" stroke-width="4.5"/><path d="M36 18 Q46 17 56 18" stroke-width="4.5"/><path d="M36 57 Q46 56 56 57" stroke-width="2"/><path d="M36 31 Q46 30 56 31" stroke-width="2"/><path d="M64.0 29.7 L66.2 38.6" stroke-width="1.3"/><path d="M66.5 30.3 L66.3 38.3" stroke-width="1.3"/><path d="M68.6 34.3 L67.3 49.7" stroke-width="1.3"/><path d="M70.6 33.4 L69.2 43.7" stroke-width="1.3"/><path d="M71.6 61.5 l1.6 -3.4" stroke-width="1.3"/><path d="M72.9 37.2 L70.4 51.7" stroke-width="1.3"/><path d="M74.4 36.4 L76.8 54.3" stroke-width="1.3"/><path d="M76.0 30.6 L74.5 61.5" stroke-width="1.3"/><path d="M78.2 17.8 L80.2 59.2" stroke-width="1.3"/><path d="M79.2 31.5 l-2.0 -3.5" stroke-width="1.3"/><path d="M79.5 29.9 L80.4 45.7" stroke-width="1.3"/><path d="M80.5 28.7 l1.9 -0.2" stroke-width="1.3"/><path d="M81.1 31.1 L82.1 61.8" stroke-width="1.3"/><path d="M82.1 64.7 l-2.9 2.5" stroke-width="1.3"/><path d="M83.5 34.4 L83.9 63.1" stroke-width="1.3"/><path d="M84.5 14.5 l-1.9 4.6" stroke-width="1.3"/><path d="M85.0 20.0 L87.1 62.0" stroke-width="1.3"/><path d="M86.7 14.4 L84.7 58.2" stroke-width="1.3"/><path d="M89.0 20.9 L86.7 68.8" stroke-width="1.3"/><path d="M90.3 11.0 L89.5 61.5" stroke-width="1.3"/><path d="M92.3 30.7 L91.3 60.9" stroke-width="1.3"/><path d="M93.3 16.2 l-2.1 1.9" stroke-width="1.3"/><path d="M94.9 13.6 L95.0 68.1" stroke-width="1.3"/><path d="M96.4 20.9 L98.0 61.8" stroke-width="1.3"/><path d="M98.2 39.9 L98.2 61.0" stroke-width="1.3"/><path d="M99.6 20.7 L101.8 66.9" stroke-width="1.3"/><path d="M101.9 31.5 L103.6 56.9" stroke-width="1.3"/><path d="M102.9 36.5 l3.0 3.5" stroke-width="1.3"/><path d="M104.4 25.2 L104.4 61.5" stroke-width="1.3"/><path d="M106.3 26.1 L105.7 51.3" stroke-width="1.3"/><path d="M108.8 23.6 L108.8 66.2" stroke-width="1.3"/><path d="M109.8 16.8 l-1.4 2.8" stroke-width="1.3"/><path d="M111.3 10.4 L112.2 58.3" stroke-width="1.3"/><path d="M113.5 30.2 L114.6 63.2" stroke-width="1.3"/><path d="M114.5 38.2 l1.6 1.9" stroke-width="1.3"/><path d="M115.1 26.5 L112.7 67.2" stroke-width="1.3"/><path d="M116.7 15.7 L116.5 59.5" stroke-width="1.3"/><path d="M118.8 20.1 L120.0 62.6" stroke-width="1.3"/><path d="M120.5 11.0 L122.3 60.1" stroke-width="1.3"/><path d="M123.1 27.1 L121.4 64.5" stroke-width="1.3"/><path d="M125.6 21.0 L126.5 55.7" stroke-width="1.3"/><path d="M127.8 25.5 L128.6 62.7" stroke-width="1.3"/><path d="M129.9 26.7 L130.5 68.7" stroke-width="1.3"/><path d="M131.1 24.3 L129.7 61.5" stroke-width="1.3"/><path d="M133.2 35.8 L133.0 53.3" stroke-width="1.3"/><path d="M134.2 14.9 l-2.2 -1.8" stroke-width="1.3"/><path d="M134.6 26.1 L134.0 54.9" stroke-width="1.3"/><path d="M136.7 30.8 L138.7 51.7" stroke-width="1.3"/><path d="M137.7 33.9 l-1.3 -0.9" stroke-width="1.3"/><path d="M138.0 35.0 L138.6 49.7" stroke-width="1.3"/><path d="M139.0 41.4 l-1.0 0.8" stroke-width="1.3"/><path d="M140.6 20.7 L140.2 50.9" stroke-width="1.3"/><path d="M142.7 27.0 L143.0 49.2" stroke-width="1.3"/><path d="M145.2 33.1 L144.5 51.0" stroke-width="1.3"/><path d="M146.4 37.2 L144.6 52.8" stroke-width="1.3"/><path d="M148.9 39.9 L148.5 48.2" stroke-width="1.3"/><path d="M149.9 27.7 l2.8 -1.2" stroke-width="1.3"/></g></svg>
+        <div class="titles">
+          <h2>Chaotic Notes</h2>
+          <p class="desc">Atonal notes with a broad, irregular spectrum, rich in nonlinear phenomena (chaos, subharmonics).</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Chaotic Notes, Barn Swallow">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/07_chaotic-notes.webp" alt="Spectrogram of the recording: chaotic notes" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/07_chaotic-notes.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 1–11 kHz</p>
+      <p class="bird"><strong>Barn Swallow</strong> <em>Hirundo rustica</em></p>
+      <p class="credit">Recording: Jonathon Jongsma · <a href="https://commons.wikimedia.org/wiki/File:Hirundo_rustica_-_Barn_Swallow_-_XC83449.ogg" rel="noopener">Wikimedia Commons / Xeno-canto XC83449</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener license">CC BY-SA 3.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+    <article class="motif" id="harmonic-stacks" style="--c:#444444">
+      <header>
+        <span class="num">8</span>
+        <svg class="glyph" viewBox="0 0 160 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 19 Q41 15 68 20" stroke-width="4"/><path d="M14 30 Q41 26 68 31" stroke-width="4"/><path d="M14 41 Q41 37 68 42" stroke-width="4"/><path d="M14 52 Q41 48 68 53" stroke-width="4"/><path d="M14 63 Q41 59 68 64" stroke-width="4"/><path d="M92 19 Q119 15 146 20" stroke-width="4"/><path d="M92 30 Q119 26 146 31" stroke-width="4"/><path d="M92 41 Q119 37 146 42" stroke-width="4"/><path d="M92 52 Q119 48 146 53" stroke-width="4"/><path d="M92 63 Q119 59 146 64" stroke-width="4"/></g></svg>
+        <div class="titles">
+          <h2>Harmonic Stacks</h2>
+          <p class="desc">A fundamental frequency with many stacked harmonics: a rich timbre.</p>
+        </div>
+      </header>
+      <div class="player">
+        <button class="play" type="button" aria-label="Play: Harmonic Stacks, Carrion Crow">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <div class="spectro" role="slider" aria-label="Playback position" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" tabindex="0">
+          <img src="/listen/spectrograms/08_harmonic-stacks.webp" alt="Spectrogram of the recording: harmonic stacks" width="1200" height="320" loading="lazy">
+          <span class="head"></span>
+        </div>
+        <audio preload="none" src="/listen/sounds/08_harmonic-stacks.mp3"></audio>
+      </div>
+      <p class="scale">12 s · 0.3–9 kHz</p>
+      <p class="bird"><strong>Carrion Crow</strong> <em>Corvus corone</em></p>
+      <p class="credit">Recording: Lawrence Shove · <a href="https://commons.wikimedia.org/wiki/File:Carrion_Crow_(Corvus_corone)_(W1CDR0001425_BD18).ogg" rel="noopener">Wikimedia Commons</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener license">CC BY-SA 4.0</a>. 12 s excerpt, mono, normalised, with fades.</p>
+    </article>
+  <footer>
+    <ul>
+      <li><a href="https://doi.org/10.1126/science.aee6239" rel="noopener">Read the paper: “The global biogeography of passerine songs”, <i>Science</i> (2026)</a></li>
+      <li><a href="https://doi.org/10.1126/science.aej0087" rel="noopener">Read Elodie F. Briefer’s commentary in <i>Science</i></a></li>
+      <li><a href="/">Explore the interactive map of the world’s birdsong</a></li>
+    </ul>
+    <p>Quentin Bacquelé, Jean-Yves Barnagaud, Cyrille Violle, Frédéric Theunissen, Nicolas Mathevon. ENES Bioacoustics Research Lab (Université Jean Monnet, Saint-Étienne) · CEFE (Montpellier) · EPHE – PSL. Recordings under Creative Commons licences, credited under each motif.</p>
+  </footer>
+</main>
+<script>
+(() => {
+  const cards = [...document.querySelectorAll('.motif')];
+  let current = null;
+  const fmt = (t) => Math.round(t);
+
+  function tick(card) {
+    const a = card.querySelector('audio');
+    const head = card.querySelector('.head');
+    const box = card.querySelector('.spectro');
+    const step = () => {
+      if (!a.duration) { if (!a.paused) requestAnimationFrame(step); return; }
+      const p = a.currentTime / a.duration;
+      head.style.transform = `translateX(${p * (box.clientWidth - 2)}px)`;
+      box.setAttribute('aria-valuenow', fmt(a.currentTime));
+      if (!a.paused) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  function stop(card) {
+    if (!card) return;
+    const a = card.querySelector('audio');
+    a.pause();
+    card.classList.remove('playing');
+  }
+
+  function play(card, at) {
+    if (current && current !== card) { stop(current); current.classList.remove('paused'); }
+    current = card;
+    const a = card.querySelector('audio');
+    if (typeof at === 'number' && isFinite(at)) a.currentTime = at;
+    a.play().then(() => { card.classList.add('playing'); card.classList.remove('paused'); tick(card); }).catch(() => {});
+  }
+
+  cards.forEach((card) => {
+    const a = card.querySelector('audio');
+    const btn = card.querySelector('.play');
+    const box = card.querySelector('.spectro');
+    btn.addEventListener('click', () => {
+      if (card.classList.contains('playing')) { stop(card); card.classList.add('paused'); }
+      else play(card);
+    });
+    box.addEventListener('click', (e) => {
+      const r = box.getBoundingClientRect();
+      const frac = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
+      const go = () => play(card, frac * (a.duration || 12));
+      if (a.readyState < 1) { a.preload = 'auto'; a.addEventListener('loadedmetadata', go, { once: true }); a.load(); }
+      else go();
+    });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); btn.click(); }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        a.currentTime = Math.min(Math.max(a.currentTime + (e.key === 'ArrowRight' ? 1 : -1), 0), a.duration || 12);
+        tick(card);
+      }
+    });
+    a.addEventListener('ended', () => { card.classList.remove('playing'); card.classList.remove('paused'); a.currentTime = 0; tick(card); });
+  });
+
+  // QR codes point to /listen/#<motif>: bring that motif into view and highlight it
+  function focusHash() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const card = id && document.getElementById(id);
+    cards.forEach((c) => c.classList.toggle('target', c === card));
+    if (card) {
+      card.scrollIntoView({ block: 'start' });
+      card.querySelector('audio').preload = 'auto';
+    }
+  }
+  window.addEventListener('hashchange', focusHash);
+  focusHash();
+})();
+</script>
+</body>
+</html>
